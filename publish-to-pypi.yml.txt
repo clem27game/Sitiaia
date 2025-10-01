@@ -1,0 +1,71 @@
+name: Publier Sitiai sur PyPI
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Construire le package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      
+      - name: Installer les dépendances de build
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+      
+      - name: Construire le package
+        run: python -m build
+      
+      - name: Sauvegarder les fichiers de distribution
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  publish-to-testpypi:
+    name: Publier sur TestPyPI
+    needs: [build]
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/sitiai
+    permissions:
+      id-token: write
+    steps:
+      - name: Télécharger les distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      
+      - name: Publier sur TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-to-pypi:
+    name: Publier sur PyPI
+    needs: [build, publish-to-testpypi]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/sitiai
+    permissions:
+      id-token: write
+    steps:
+      - name: Télécharger les distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      
+      - name: Publier sur PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
