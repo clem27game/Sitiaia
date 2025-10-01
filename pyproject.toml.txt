@@ -1,0 +1,9 @@
+[project]
+name = "sitiai"
+version = "0.1.0"
+description = "Framework Python pour créer et entraîner des IA légères"
+authors = ["Clemylia"]
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.24.0"
+]
