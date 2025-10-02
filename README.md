@@ -392,3 +392,31 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 </div>
 
 🛑 **Attention** : Remplacez sitiai par Sitiaia dans les codes pour que la version obtenu avec le repos github fonctionne
+
+**Exemple de code pour sauvegarder votre modèle dans un fichier npz** :
+
+```
+import Sitiaia
+import numpy as np
+
+# Create a simple AI (e.g., a linear AI)
+simple_ai = Sitiaia.create.ai('linear', input_size=2, output_size=1)
+
+# You might want to train it first, but for saving, just creating it is enough
+# X_train = np.random.randn(10, 2)
+# y_train = np.random.randn(10, 1)
+# simple_ai.train(X_train, y_train, epochs=10)
+
+# Save the AI weights to a .npz file
+filename = 'simple_ai_model.npz'
+simple_ai.save_weights(filename)
+
+print(f"Simple AI saved to {filename}")
+
+# You can optionally load the weights back to verify
+# loaded_ai = Sitiaia.create.ai('linear', input_size=2, output_size=1)
+# loaded_ai.load_weights(filename)
+# print(f"Simple AI loaded from {filename}")
+```
+
+Pour plus d'informations et d'exemples, consulter les fichiers Demo.py et example_save_load.py.
