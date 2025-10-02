@@ -140,6 +140,57 @@ class GenerativeAI:
         """
         return [self.generate(max_length, temperature) for _ in range(n)]
     
+    def save_weights(self, filepath: str):
+        """
+        Sauvegarde le modèle génératif dans un fichier
+        
+        Args:
+            filepath: Chemin du fichier de sauvegarde (.npz)
+            
+        Example:
+            >>> ai.save_weights('name_generator.npz')
+        """
+        if not filepath.endswith('.npz'):
+            filepath += '.npz'
+        
+        if not self.is_trained:
+            print("⚠️ Attention: Le modèle n'est pas entraîné")
+        
+        save_data = {
+            'transition_matrix': self.transition_matrix,
+            'char_to_idx': np.array(list(self.char_to_idx.items()), dtype=object),
+            'idx_to_char': np.array(list(self.idx_to_char.items()), dtype=object),
+            'mode': np.array([self.mode]),
+            'is_trained': np.array([self.is_trained])
+        }
+        
+        np.savez(filepath, **save_data)
+        print(f"✓ Modèle génératif sauvegardé dans '{filepath}'")
+    
+    def load_weights(self, filepath: str):
+        """
+        Charge un modèle génératif depuis un fichier
+        
+        Args:
+            filepath: Chemin du fichier de sauvegarde (.npz)
+            
+        Example:
+            >>> ai = sitiai.create.ai('generative')
+            >>> ai.load_weights('name_generator.npz')
+        """
+        if not filepath.endswith('.npz'):
+            filepath += '.npz'
+        
+        data = np.load(filepath, allow_pickle=True)
+        
+        self.transition_matrix = data['transition_matrix']
+        self.char_to_idx = dict(data['char_to_idx'])
+        self.idx_to_char = {int(k): v for k, v in data['idx_to_char']}
+        self.mode = str(data['mode'][0])
+        self.is_trained = bool(data['is_trained'][0])
+        
+        print(f"✓ Modèle génératif chargé depuis '{filepath}'")
+    
     def __repr__(self):
         status = "entraîné" if self.is_trained else "non entraîné"
         return f"GenerativeAI(mode='{self.mode}', status='{status}')"
