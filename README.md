@@ -390,3 +390,5 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 [🐛 Reporter un Bug](https://github.com/clemylia/sitiai/issues) | [💡 Demander une Feature](https://github.com/clem27game/sitiaia/issues) | [📖 Documentation](https://github.com/clem27game/sitiaia)
 
 </div>
+
+🛑 **Attention** : Remplacez sitiai par Sitiaia dans les codes pour que la version obtenu avec le repos github fonctionne
